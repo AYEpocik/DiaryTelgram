@@ -24,9 +24,9 @@ dp = Dispatcher(bot)
 scheduler = AsyncIOScheduler()
 
 # Создаем клавиатуру с кнопками
-keyboard = types.ReplyKeyboardMarkup(row_width=2) # Указываем количество кнопок в ряду
+keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2) # Указываем количество кнопок в ряду
 # Добавляем кнопки с текстом
-keyboard.add("Калькулятор", "Меню", "Перевод баллов ЕГЭ", "Анекдоты", "Расписание")
+keyboard.add("Калькулятор🧮", "Что в столовой?🍲", "Перевод баллов ЕГЭ💯", "Анекдоты😂", "Расписание📅")
 
 # Определяем асинхронную функцию для обработки команды /start
 @dp.message_handler(commands=["start"])
@@ -48,15 +48,18 @@ async def start_message(message: types.Message):
     cur.close()
     conn.close()
 
-@dp.message_handler(lambda message: message.text == "Меню")
+@dp.message_handler(lambda message: message.text == "Что в столовой?🍲")
 async def start(message: types.Message):
-    # Отправляем сообщение с выбором типа питания
-    await message.answer("Выберите тип питания:")
-    # Создаем клавиатуру с двумя кнопками: Завтрак и Обед
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add("Завтрак", "Обед")
-    # Отправляем клавиатуру пользователю
-    await message.answer("Выберите тип питания:", reply_markup=keyboard)
+	# Создаем клавиатуру с тремя кнопками: Завтрак, Обед и Команды
+	keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+	keyboard.add("Завтрак", "Обед", "Главное меню")
+	# Отправляем сообщение с выбором типа питания и клавиатурой
+	await message.answer("Вас интересует завтрак или обед?", reply_markup=keyboard)
+
+@dp.message_handler(lambda message: message.text == "Главное меню")
+async def commands(message: types.Message):
+	# Отправляем сообщение с клавиатурой с функциями бота
+	await message.answer("Выберите одну из функций бота.", reply_markup=keyboard)
 
 # Определяем асинхронную функцию для обработки сообщений с текстом "Завтрак" или "Обед"
 @dp.message_handler(lambda message: message.text in ["Завтрак", "Обед"])
@@ -77,7 +80,7 @@ async def menu(message: types.Message):
         food_type = "breakfast"
     else:
         food_type = "lunch"
-    query = f"SELECT {food_type}1 || '/' || {food_type}2 FROM menu WHERE weekday = '{weekday}'"
+    query = f"SELECT {food_type}1 || ', либо ' || {food_type}2 FROM menu WHERE weekday = '{weekday}'"
     # Подключаемся к базе данных SQLite
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -92,9 +95,9 @@ async def menu(message: types.Message):
     # Формируем текст сообщения бота с днем недели и меню
     # Если день недели - воскресенье, то пишем "Завтра на...", иначе пишем "Сегодня на..."
     if real_weekday == "Sunday":
-        bot_message = "Завтра на {} в вашей школе: {}".format(user_message.lower(), menu)
+        bot_message = "Завтра на {} в вашей школе {}".format(user_message.lower(), menu)
     else:
-        bot_message = "Сегодня на {} в вашей школе: {}".format(user_message.lower(), menu)
+        bot_message = "Сегодня на {} в вашей школе {}".format(user_message.lower(), menu)
     # Отправляем сообщение пользователю
     await message.answer(bot_message)
 
