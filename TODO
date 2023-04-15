@@ -1,0 +1,4 @@
+# TODO: Модуль для добавления записей в таблицы
+# TODO: Подключение к боту
+
+# TODO: Переписать программы test1hello_bot.py и test2menu_bot.py на модуль python-telegram-bot
