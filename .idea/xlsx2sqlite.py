@@ -1,85 +1,25 @@
 # Импортируем необходимые библиотеки
-import openpyxl
+import pandas as pd
 import sqlite3
-import os
 
-table_path = '../Database/school.xlsx'
+# Задаем имя файла excel и базы данных
+excel_file = "../Database/school.xlsx"
+db_file = "../Database/school.db"
 
-# Открываем файл .xlsx с помощью openpyxl
-wb = openpyxl.load_workbook(table_path)
+# Спрашиваем пользователя, какую страницу excel-файла добавить в базу данных
+sheet_name = input("Введите название страницы excel-файла: ")
 
-# Создаем имя файла .db с тем же именем, что и .xlsx, но с другим расширением
-db_name = os.path.splitext(table_path)[0] + ".db"
+# Считываем данные из excel-файла в датафрейм
+df = pd.read_excel(excel_file, sheet_name=sheet_name, dtype=str)
 
-# Создаем соединение с файлом .db с помощью sqlite3
-conn = sqlite3.connect(db_name)
+# Создаем подключение к базе данных
+conn = sqlite3.connect(db_file)
 
-# Создаем курсор для выполнения SQL-запросов
-cur = conn.cursor()
+# Записываем датафрейм в таблицу в базе данных с именем страницы excel-файла и указанным типом данных TEXT для всех полей
+df.to_sql(sheet_name, conn, if_exists="replace")
 
-# Перебираем все имена листов в файле .xlsx
-for sheet_name in wb.sheetnames:
-    # Получаем объект листа по имени
-    sheet = wb[sheet_name]
-
-    # Получаем количество строк и столбцов в листе
-    rows = sheet.max_row
-    cols = sheet.max_column
-
-    # Создаем список для хранения имен полей
-    fields = []
-
-    # Читаем имена полей из первой строки листа и добавляем их в список
-    for col in range(1, cols + 1):
-        field = sheet.cell(row=1, column=col).value
-        fields.append(field)
-
-    # Создаем SQL-запрос для создания таблицы с тем же именем, что и лист, и теми же полями
-    sql_create = f"CREATE TABLE IF NOT EXISTS {sheet_name} ("
-
-    # Добавляем имена полей и типы данных в SQL-запрос
-    for field in fields:
-        sql_create += f"{field} TEXT,"
-
-    # Удаляем последнюю запятую из SQL-запроса
-    sql_create = sql_create[:-1]
-
-    # Добавляем закрывающую скобку в SQL-запрос
-    sql_create += ")"
-
-    # Выполняем SQL-запрос для создания таблицы
-    cur.execute(sql_create)
-
-    # Создаем SQL-запрос для вставки данных из листа в таблицу
-    sql_insert = f"INSERT INTO {sheet_name} VALUES ("
-
-    # Добавляем знаки вопроса в SQL-запрос для каждого поля
-    for field in fields:
-        sql_insert += "?,"
-
-    # Удаляем последнюю запятую из SQL-запроса
-    sql_insert = sql_insert[:-1]
-
-    # Добавляем закрывающую скобку в SQL-запрос
-    sql_insert += ")"
-
-    # Читаем данные из листа, начиная со второй строки, и добавляем их в список кортежей
-    data = []
-    for row in range(2, rows + 1):
-        record = []
-        for col in range(1, cols + 1):
-            value = sheet.cell(row=row, column=col).value
-            record.append(value)
-        data.append(tuple(record))
-
-    # Выполняем SQL-запрос для вставки данных в таблицу с помощью метода executemany
-    cur.executemany(sql_insert, data)
-
-# Сохраняем изменения в файле .db с помощью метода commit
-conn.commit()
-
-# Закрываем соединение с файлом .db с помощью метода close
+# Закрываем соединение с базой данных
 conn.close()
 
-#Выводим сообщение об успешном завершении программы
-print(f"Файл {db_name} успешно создан.")
+# Выводим сообщение об успешном завершении программы
+print(f"Программа завершена. Данные из файла {excel_file} добавлены в таблицу {sheet_name} в базе данных {db_file}.")
