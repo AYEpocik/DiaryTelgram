@@ -6,20 +6,25 @@ import sqlite3
 excel_file = "../Database/school.xlsx"
 db_file = "../Database/school.db"
 
-# Спрашиваем пользователя, какую страницу excel-файла добавить в базу данных
-sheet_name = input("Введите название страницы excel-файла: ")
+# Спрашиваем пользователя, какие страницы excel-файла добавить в базу данных
+sheets = (input("Введите названия страниц excel-файла через запятую: ").split(","))
 
-# Считываем данные из excel-файла в датафрейм
-df = pd.read_excel(excel_file, sheet_name=sheet_name, dtype=str)
+for sheet in sheets:
 
-# Создаем подключение к базе данных
-conn = sqlite3.connect(db_file)
+    # Удаляем пробелы по бокам
+    sheet = sheet.strip().lower()
 
-# Записываем датафрейм в таблицу в базе данных с именем страницы excel-файла и указанным типом данных TEXT для всех полей
-df.to_sql(sheet_name, conn, if_exists="replace")
+    # Считываем данные из excel-файла в датафрейм
+    df = pd.read_excel(excel_file, sheet_name=sheet, dtype=str)
 
-# Закрываем соединение с базой данных
-conn.close()
+    # Создаем подключение к базе данных
+    conn = sqlite3.connect(db_file)
+
+    # Записываем датафрейм в таблицу в базе данных с именем страницы excel-файла и указанным типом данных TEXT для всех полей
+    df.to_sql(sheet, conn, if_exists='replace')
+
+    # Закрываем соединение с базой данных
+    conn.close()
 
 # Выводим сообщение об успешном завершении программы
-print(f"Программа завершена. Данные из файла {excel_file} добавлены в таблицу {sheet_name} в базе данных {db_file}.")
+print(f"Программа завершена. Данные из файла {excel_file} добавлены в таблицу {sheet} в базе данных {db_file}.")
