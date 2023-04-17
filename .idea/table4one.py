@@ -5,8 +5,34 @@ import matplotlib.pyplot as plt
 
 # Указываем путь к базе данных
 DB_PATH = "../Database/school.db"
+
+def surnames(DB_PATH=DB_PATH):
+    # Устанавливаем соединение с базой данных
+    conn = sqlite3.connect(DB_PATH)
+    # Создаем курсор
+    cursor = conn.cursor()
+    # Формируем запрос
+    query = "SELECT surname FROM monday"
+    # Выполняем запрос
+    cursor.execute(query)
+    # Получаем результаты
+    results = cursor.fetchall()
+    # Создаем пустой список
+    surnames = []
+    # Перебираем результаты и добавляем их в список
+    for row in results:
+        surnames.append(row[0])
+    # Преобразуем список в кортеж
+    surnames = tuple(surnames)
+    # Закрываем курсор и соединение
+    cursor.close()
+    conn.close()
+    return surnames
+
 # Запрашиваем фамилию
 surname = input('Введите фамилию ученика: ').lower()
+while surname not in surnames():
+    surname = input('Такой ученик не найден. Попробуйте еще раз: ').lower()
 
 def create_own_schedule(surname, DB_PATH):
     # Создаем подключение к базе данных
