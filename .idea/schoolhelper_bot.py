@@ -4,6 +4,7 @@ import sqlite3 # Библиотека для работы с базами дан
 from aiogram import Bot, Dispatcher, executor, types # Библиотека для работы с телеграм API
 from apscheduler.schedulers.asyncio import AsyncIOScheduler # Библиотека для планирования задач
 import datetime # Библиотека для работы с датами
+import string # Библиотека для работы со строками
 
 
 # Определяем путь к файлу с токеном
@@ -105,16 +106,21 @@ async def menu(message: types.Message):
 async def calculate(message: types.Message):
     # Пытаемся вычислить выражение, используя функцию eval()
     try:
-        result = eval(message.text)
-        # Отправляем результат в чат с пользователем
-        await message.answer(result)
+        decide = True
+        for i in message.text:
+            if i not in string.digits + string.punctuation:
+                decide = False
+        if decide == True:
+            result = eval(message.text)
+            # Отправляем результат в чат с пользователем
+            await message.answer(result)
     # Если произошла ошибка, например, неверный синтаксис или деление на ноль
     except:
         pass
 
 #@dp.message_handler(lambda message: message.text == "Расписание📅")
 
-def create_own_schedule(surname, DB_PATH=DB_PATH):
+async def create_own_schedule(surname, DB_PATH=DB_PATH):
     # Создаем подключение к базе данных
     conn = sqlite3.connect(DB_PATH)
     # Задаем путь для сохранения изображения расписания
@@ -164,11 +170,16 @@ async def send_message_to_all():
     for user_id in user_ids:
         # Отправляем сообщение пользователю с помощью метода bot.send_message
         await bot.send_message(user_id[0], "Привет! Сделал ли ты уроки на завтра?")
-# Добавляем функцию send_message_to_all в расписание с помощью метода scheduler.add_job()
-scheduler.add_job(send_message_to_all, "cron", hour=18, minute=50)
 
-# Запускаем планировщик
-scheduler.start()
+def main():
+    # Добавляем функцию send_message_to_all в расписание с помощью метода scheduler.add_job()
+    scheduler.add_job(send_message_to_all, "cron", hour=18, minute=50)
 
-# Запускаем бота с помощью метода executor.start_polling()
-executor.start_polling(dp, skip_updates=True)
+    # Запускаем планировщик
+    scheduler.start()
+
+    # Запускаем бота с помощью метода executor.start_polling()
+    executor.start_polling(dp, skip_updates=True)
+
+if __name__ == '__main__':
+    main()
