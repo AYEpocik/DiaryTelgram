@@ -120,7 +120,7 @@ async def calculate(message: types.Message):
 
 #@dp.message_handler(lambda message: message.text == "Расписание📅")
 
-async def create_own_schedule(surname, DB_PATH=DB_PATH):
+async def create_week_schedule(surname, DB_PATH=DB_PATH):
     # Создаем подключение к базе данных
     conn = sqlite3.connect(DB_PATH)
     # Задаем путь для сохранения изображения расписания

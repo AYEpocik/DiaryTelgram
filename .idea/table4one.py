@@ -34,7 +34,7 @@ surname = input('Введите фамилию ученика: ').lower()
 while surname not in surnames():
     surname = input('Такой ученик не найден. Попробуйте еще раз: ').lower()
 
-def create_own_schedule(surname, DB_PATH):
+def create_week_schedule(surname, DB_PATH):
     # Создаем подключение к базе данных
     conn = sqlite3.connect(DB_PATH)
     # Задаем путь для сохранения изображения расписания
@@ -55,6 +55,7 @@ def create_own_schedule(surname, DB_PATH):
         df = df.T
         # Переименовываем столбец с уроками в название дня недели
         df.rename(columns={0: days[day]}, inplace=True)
+        #df = vert_rearrange_columns(df, 3)
         # Добавляем датафрейм к общему расписанию без параметра fill_value
         schedule = pd.concat([schedule, df], axis=1)
     # Сохраняем расписание в jpg-файл
@@ -66,4 +67,4 @@ def create_own_schedule(surname, DB_PATH):
     conn.close()
 
 # Запускаем выполнение функции
-create_own_schedule(surname, DB_PATH)
+create_week_schedule(surname, DB_PATH)
