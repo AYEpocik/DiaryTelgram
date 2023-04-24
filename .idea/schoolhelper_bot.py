@@ -81,7 +81,7 @@ async def menu(message: types.Message):
         food_type = "breakfast"
     else:
         food_type = "lunch"
-    query = f"SELECT {food_type}1 || ', либо ' || {food_type}2 FROM menu WHERE weekday = '{weekday}'"
+    query = f"SELECT {food_type}1 || ', или ' || {food_type}2 FROM menu WHERE weekday = '{weekday}'"
     # Подключаемся к базе данных SQLite
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -96,9 +96,11 @@ async def menu(message: types.Message):
     # Формируем текст сообщения бота с днем недели и меню
     # Если день недели - воскресенье, то пишем "Завтра на...", иначе пишем "Сегодня на..."
     if real_weekday == "Sunday":
-        bot_message = "Завтра на {} в столовой {}".format(user_message.lower(), menu)
+        bot_message = f"Завтра на {user_message.lower()} в столовой {menu}"
+    elif (real_weekday == "Saturday") and (message.text == "Обед"):
+        bot_message = "Сегодня обедов нет"
     else:
-        bot_message = "Сегодня на {} в столовой {}".format(user_message.lower(), menu)
+        bot_message = f"Сегодня на {user_message.lower()} в столовой {menu}"
     # Отправляем сообщение пользователю
     await message.answer(bot_message)
 

@@ -59,10 +59,10 @@ def create_week_schedule(surname, DB_PATH):
         # Добавляем датафрейм к общему расписанию без параметра fill_value
         schedule = pd.concat([schedule, df], axis=1)
     # Сохраняем расписание в jpg-файл
-    plt.figure(figsize=(13, 2), dpi=1000)
+    plt.figure(figsize=(13, 2), dpi=200)
     plt.table(cellText=schedule.values, colLabels=schedule.columns, cellLoc="left", loc='upper left')
     plt.axis("off")
-    plt.savefig(output_path, dpi=1000)
+    plt.savefig(output_path, dpi=200)
     # Закрываем соединение с базой данных
     conn.close()
 
