@@ -5,6 +5,7 @@ from aiogram import Bot, Dispatcher, executor, types # Библиотека дл
 from apscheduler.schedulers.asyncio import AsyncIOScheduler # Библиотека для планирования задач
 import datetime # Библиотека для работы с датами
 import string # Библиотека для работы со строками
+import calc
 
 
 # Определяем путь к файлу с токеном
@@ -104,21 +105,7 @@ async def menu(message: types.Message):
     # Отправляем сообщение пользователю
     await message.answer(bot_message)
 
-@dp.message_handler(content_types=["text"])
-async def calculate(message: types.Message):
-    # Пытаемся вычислить выражение, используя функцию eval()
-    try:
-        decide = True
-        for i in message.text:
-            if i not in string.digits + string.punctuation:
-                decide = False
-        if decide == True:
-            result = eval(message.text)
-            # Отправляем результат в чат с пользователем
-            await message.answer(result)
-    # Если произошла ошибка, например, неверный синтаксис или деление на ноль
-    except:
-        pass
+
 
 #@dp.message_handler(lambda message: message.text == "Расписание📅")
 
