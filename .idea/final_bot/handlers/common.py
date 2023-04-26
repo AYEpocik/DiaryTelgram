@@ -1,11 +1,13 @@
 from aiogram import Router, types # Импортируем объект роутера и типы
-from aiogram.filters import Command, Text # Импортируем считывание комманд
+from aiogram.filters import CommandStart, Text # Импортируем считывание комманд
+
+from keyboards.reply_kb import main_menu_keyboard # Импортируем обычные клавиатуры
 
 
 router = Router() # Определяем роутер
 
 # Определяем асинхронную функцию для обработки команды /start
-@router.message(Command('start'))
+@router.message(CommandStart())
 async def start_message(message: types.Message):
     # Отправляем приветственное сообщение с клавиатурой
     await message.answer("Привет! Я бот, который может помочь тебе с разными вещами. Выбери одну из кнопок ниже.", reply_markup=main_menu_keyboard())

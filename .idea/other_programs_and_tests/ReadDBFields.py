@@ -2,7 +2,7 @@
 import sqlite3
 
 # Указываем путь к файлу базы данных
-DB_PATH = '../Database/school.db'
+DB_PATH = '../../Database/school.db'
 
 # Подключаемся к базе данных
 conn = sqlite3.connect(DB_PATH)

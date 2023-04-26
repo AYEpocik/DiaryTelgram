@@ -4,10 +4,10 @@ import sqlite3 # Библиотека для работы с SQLite
 import datetime # Библиотека для работы с датами
 
 # Определяем путь к файлу с токеном
-TOKEN_PATH = "../tokens/token_test3menu_bot.txt"
+TOKEN_PATH = "../../tokens/token_test3menu_bot.txt"
 
 # Определяем путь к файлу базы данных
-DB_PATH = "../Database/school.db"
+DB_PATH = "../../Database/school.db"
 
 # Открываем файл в режиме чтения
 with open(TOKEN_PATH, "r") as f:

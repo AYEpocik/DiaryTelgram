@@ -1,3 +1,10 @@
+# Определяем токен "schoolhelper_bot"-а
+TOKEN = '6111962134:AAHxMHk9M44KTy7I_ZL9fSXYKOL2Cw3n-W8'
+
+# Определяем путь к файлу с базой данных
+DB_PATH = "../../Database/school.db"
+
+# Словарь с переводами названий предметов
 school_subjects = {
     'Русский': 'russian',
     'Профиль': 'profmath',
@@ -17,6 +24,7 @@ school_subjects = {
     'Китайский': 'chinese'
 }
 
+# Словарь с переводами дней недели
 weekdays = {'monday':'Понедельник',
             'tuesday':'Вторник',
             'wednesday':'Среда',
@@ -25,6 +33,7 @@ weekdays = {'monday':'Понедельник',
             'saturday':'Суббота'
 }
 
+# Словарь с Винительными Падежами дней недели (для кнопки "Что в столовой?")
 weekdays_in_vp = {
     'monday': 'В понедельник',
     'tuesday': 'Во вторник',

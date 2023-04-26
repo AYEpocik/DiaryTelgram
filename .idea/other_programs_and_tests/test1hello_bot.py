@@ -4,7 +4,7 @@ import os # Библиотека для работы с переменными �
 
 
 # Определяем путь к файлу с токеном
-TOKEN_PATH = "../tokens/token_test1hello_bot.txt"
+TOKEN_PATH = "../../tokens/token_test1hello_bot.txt"
 
 # Открываем файл в режиме чтения
 with open(TOKEN_PATH, "r") as f:

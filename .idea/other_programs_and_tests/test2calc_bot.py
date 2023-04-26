@@ -3,7 +3,7 @@ import telebot # Библиотека для работы с телеграм AP
 import os # Библиотека для работы с переменными окружения
 
 # Определяем путь к файлу с токеном
-TOKEN_PATH = "../tokens/token_test2calc_bot.txt"
+TOKEN_PATH = "../../tokens/token_test2calc_bot.txt"
 
 # Открываем файл в режиме чтения
 with open(TOKEN_PATH, "r") as f:
