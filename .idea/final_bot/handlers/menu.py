@@ -18,8 +18,9 @@ async def start(message: types.Message) -> None:
 
 
 # Определяем асинхронную функцию для обработки сообщений с текстом "Завтрак" или "Обед"
-@router.message(F.text.lower().in_(("завтрак", "обед")))
+@router.message(F.text.lower().in_({"завтрак", "обед"}))
 async def menu(message: types.Message) -> None:
+    user_message = message.text.lower()  # Получаем текст сообщения от пользователя
     # Получаем текущую дату
     date = datetime.date.today()
     # Получаем день недели в виде строки (например, Monday)
@@ -32,7 +33,7 @@ async def menu(message: types.Message) -> None:
     # Формируем запрос к базе данных для получения меню по дню недели и типу питания
     # Конкатенируем два блюда с разделителем ', или '
     # Используем английские слова для типов питания
-    if message.text.lower() == "завтрак":
+    if user_message == "завтрак":
         food_type = "breakfast"
     else:
         food_type = "lunch"
@@ -42,14 +43,14 @@ async def menu(message: types.Message) -> None:
         cursor = conn.cursor()
         cursor.execute(query) # Выполняем запрос
         menu = cursor.fetchone()[0] # Получаем результат запроса в виде строки
-    user_message = message.text # Получаем текст сообщения от пользователя
+
     # Формируем текст сообщения бота с днем недели и меню
     # Если день недели - воскресенье, то пишем "Завтра на...", иначе пишем "Сегодня на..."
     if real_weekday == "sunday":
-        bot_message = f"Завтра на {user_message.lower()} {menu}"
+        bot_message = f"Завтра на {user_message} {menu}"
     elif (real_weekday == "saturday") and (message.text == "Обед"):
         bot_message = "Сегодня обедов нет"
     else:
-        bot_message = f"Сегодня на {user_message.lower()} {menu}"
+        bot_message = f"Сегодня на {user_message} {menu}"
     # Отправляем сообщение пользователю
     await message.answer(bot_message)
