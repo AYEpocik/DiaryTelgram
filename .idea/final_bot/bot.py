@@ -8,7 +8,7 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder #
 
 from handlers import common, schedule, menu, jokes, calc, echo_gif_or_sticker # Импортируем модули с хэндлерами
 from keyboards.reply_kb import main_menu_keyboard, breakfast_or_lunch # Импортируем обычные клавиатуры
-from data.constants import TOKEN, DB_PATH # Импортируем токен бота и путь к базе данных
+from data.consts_and_vars import all_surnames, TOKEN, DB_PATH # Импортируем константы и переменные
 
 
 bot = Bot(token=TOKEN) # Создаем объект бота
@@ -23,11 +23,11 @@ dp.include_routers(common.router,
                    echo_gif_or_sticker.router
 )
 
+
 async def main():
     await bot.delete_webhook(drop_pending_updates=True) # Пропускаем все накопленные входящие
     print('Бот запущен!')
     await dp.start_polling(bot) # Запускаем бота
-
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -6,7 +6,7 @@ from aiogram.filters import Text # Импортируем фильтр текс�
 from aiogram.utils.keyboard import ReplyKeyboardBuilder # Импортируем объект конструктора клавиатуры
 
 from keyboards.reply_kb import main_menu_keyboard, breakfast_or_lunch # Импортируем обычные клавиатуры
-from data.constants import DB_PATH # Импортируем токен бота и путь к базе данных
+from data.consts_and_vars import DB_PATH # Импортируем токен бота и путь к базе данных
 
 
 router = Router() # Определяем роутер

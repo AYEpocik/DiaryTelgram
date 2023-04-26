@@ -1,3 +1,6 @@
+import sqlite3 # Импортируем библиотеку для работы с базой данных
+
+
 # Определяем токен "schoolhelper_bot"-а
 TOKEN = '6111962134:AAHxMHk9M44KTy7I_ZL9fSXYKOL2Cw3n-W8'
 
@@ -42,3 +45,16 @@ weekdays_in_vp = {
     'friday': 'В пятницу',
     'saturday': 'В субботу'
 }
+
+def all_surnames(DB_PATH=DB_PATH) -> list:
+    request = 'SELECT surname FROM monday'
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute(request)
+        surnames = cursor.fetchall()
+        for i in range(len(surnames)):
+            surnames[i] = surnames[i][0]
+    return surnames
+
+def get_second_scores(subject: str, DB_PATH=DB_PATH) -> list:
+    request = f'SELECT '
