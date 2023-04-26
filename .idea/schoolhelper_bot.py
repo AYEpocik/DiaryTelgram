@@ -1,22 +1,17 @@
-# Импортируем необходимые библиотеки
-import asyncio # Библиотека для асинхронного программирования
 import sqlite3 # Библиотека для работы с базами данных SQLite
 from aiogram import Bot, Dispatcher, executor, types # Библиотека для работы с телеграм API
 from apscheduler.schedulers.asyncio import AsyncIOScheduler # Библиотека для планирования задач
 import datetime # Библиотека для работы с датами
 import string # Библиотека для работы со строками
-import calc
+import calc # Импортируем handler пассивного калькулятора
+from config_reader import config # Импортируем конфиг с токеном бота
 
 
-# Определяем путь к файлу с токеном
-TOKEN_PATH = "../tokens/token_schoolhelper_bot.txt"
+# Определяем токен бота
+TOKEN = config.bot_token.get_secret_value()
+
 # Определяем путь к файлу с базой данных
 DB_PATH = "../Database/school.db"
-
-# Открываем файл в режиме чтения
-with open(TOKEN_PATH, "r") as f:
-    # Читаем токен из файла и удаляем лишние пробелы и символы переноса строки
-    TOKEN = f.read().strip()
 
 # Создаем объект бота
 bot = Bot(token=TOKEN)

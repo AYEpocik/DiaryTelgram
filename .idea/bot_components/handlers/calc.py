@@ -1,5 +1,10 @@
-from aiogram import Dispatcher, types # Импортируем диспетчер и типы
+from aiogram import Router, types, F # Импортируем диспетчер, типы и магический фильтр
+import string # Библиотека для работы со строками
 
+
+router = Router() # Определяем роутер
+
+@router.message(F.text)
 async def calculate(message: types.Message):
     # Пытаемся вычислить выражение, используя функцию eval()
     try:
@@ -14,6 +19,3 @@ async def calculate(message: types.Message):
     # Если произошла ошибка, например, неверный синтаксис или деление на ноль
     except:
         pass
-
-def register_handlers_calc(dp: Dispatcher):
-    dp.register_message_handler(calculate, content_types=['text'])
