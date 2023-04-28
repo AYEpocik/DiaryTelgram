@@ -4,11 +4,9 @@ import string # Библиотека для работы со строками
 import asyncio # Библиотека "асинхронности"
 
 from aiogram import Bot, Dispatcher # Импортируем объекты бота, диспетчера
-from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder # Импортируем объекты создания обычных и inline клавиатур
 
 from handlers import common, schedule, menu, scores, jokes, calc, echo_gif_or_sticker # Импортируем модули с хэндлерами
-from data.consts_and_vars import TOKEN #DB_PATH Импортируем константы и переменные '''all_surnames, get_second_scores, school_subjects, first_to_second,'''
-from data.bot_states import ConvertingPoints # Импортируем класс с состояниями
+from data.consts_and_vars import TOKEN, list_of_values # Импортируем константы и переменные
 
 
 bot = Bot(token=TOKEN) # Создаем объект бота

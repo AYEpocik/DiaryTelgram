@@ -10,3 +10,7 @@ class Default(StatesGroup):
 
 class FoodMenu(StatesGroup):
     ask_for_meal_times = State()
+
+class ScheduleStates(StatesGroup):
+    waiting_for_surname = State()
+    waiting_for_weekday = State()

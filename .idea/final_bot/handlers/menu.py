@@ -7,7 +7,8 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder # Импортируем
 from aiogram.fsm.context import FSMContext # Импортируем конечные автоматы
 from aiogram.fsm.state import StatesGroup, State # Импортируем объект состояния для бота FSM
 
-from keyboards.reply_kb import main_menu_keyboard, breakfast_or_lunch # Импортируем обычные клавиатуры
+from keyboards.reply_kb import main_menu_keyboard # Импортируем обычные клавиатуры
+from keyboards.inline_kb import breakfast_or_lunch # Импортируем Инлайн-клавиатуры
 from data.consts_and_vars import DB_PATH # Импортируем токен бота и путь к базе данных
 from data.bot_states import FoodMenu # Импортируем класс с состояниями бота для функции "Меню"
 
@@ -21,21 +22,17 @@ async def start(message: types.Message, state: FSMContext) -> None:
 
 
 # Определяем асинхронную функцию для обработки сообщений с текстом "Завтрак" или "Обед"
-@router.message(
-    F.text.lower().in_({"завтрак", "обед"}),
-    FoodMenu.ask_for_meal_times
-)
-async def menu(message: types.Message) -> None:
-    user_message = message.text.lower()  # Получаем текст сообщения от пользователя
-    # Получаем текущую дату
-    date = datetime.date.today()
-    # Получаем день недели в виде строки (например, Monday)
-    real_weekday = date.strftime("%A").lower()
+@router.callback_query(FoodMenu.ask_for_meal_times)
+async def menu(callback: types.callback_query) -> None:
+    user_message = callback.data  # Получаем текст сообщения от пользователя
+    date = datetime.date.today() # Получаем текущую дату
+    real_weekday = date.strftime("%A").lower() # Получаем день недели в виде строки
     # Если день недели - воскресенье, то добавляем один день к дате и получаем понедельник
     if real_weekday == "sunday":
         date += datetime.timedelta(days=1)
         weekday = date.strftime("%a")
-    else: weekday = real_weekday
+    else:
+        weekday = real_weekday
     # Формируем запрос к базе данных для получения меню по дню недели и типу питания
     # Конкатенируем два блюда с разделителем ', или '
     # Используем английские слова для типов питания
@@ -53,9 +50,14 @@ async def menu(message: types.Message) -> None:
     # Если день недели - воскресенье, то пишем "Завтра на...", иначе пишем "Сегодня на..."
     if real_weekday == "sunday":
         bot_message = f"Завтра на {user_message} {menu}"
-    elif (real_weekday == "saturday") and (message.text == "Обед"):
+    elif (real_weekday == "saturday") and (user_message == "обед"):
         bot_message = "Сегодня обедов нет"
     else:
         bot_message = f"Сегодня на {user_message} {menu}"
     # Отправляем сообщение пользователю
-    await message.answer(bot_message)
+    await callback.message.answer(bot_message)
+    await callback.answer()
+
+@router.callback_query(FoodMenu.ask_for_meal_times)
+async def cheking(callback: types.callback_query):
+    print('хэндлер пропущен')

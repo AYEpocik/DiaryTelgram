@@ -39,13 +39,35 @@ school_subjects = {
     'Китайский': 'chinese'
 }
 
+
+# Словарь с предметами в дательном падеже
+school_subjects_in_dp = {
+    'russian': 'по русскому языку',
+    'profmath': 'по профильной математике',
+    'basemath': 'по базовой математике',
+    'physics': 'по физике',
+    'chemistry': 'по химии',
+    'informatics': 'по информатике',
+    'biology': 'по биологии',
+    'history': 'по истории',
+    'geography': 'по географии',
+    'english': 'по английскому языку',
+    'german': 'по немецкому языку',
+    'french': 'по французскому языку',
+    'society': 'по обществознанию',
+    'spanish': 'по испанскому языку',
+    'chinese': 'по китайскому языку',
+    'literature': 'по литературе'
+}
+
 # Словарь с переводами дней недели
-weekdays = {'monday':'Понедельник',
-            'tuesday':'Вторник',
-            'wednesday':'Среда',
-            'thursday':'Четверг',
-            'friday':'Пятница',
-            'saturday':'Суббота'
+weekdays = {
+    'monday': 'понедельник',
+    'tuesday': 'вторник',
+    'wednesday': 'среда',
+    'thursday': 'четверг',
+    'friday': 'пятница',
+    'saturday': 'суббота'
 }
 
 # Словарь с Винительными Падежами дней недели (для кнопки "Что в столовой?")
@@ -81,6 +103,18 @@ def get_second_scores(subject: str, DB_PATH=DB_PATH) -> list:
     for i in range(len(sec_scores)):
         sec_scores[i] = int(sec_scores[i])
     return sec_scores
+
+def list_of_values(table: str, field: str, row_value: str, DB_PATH=DB_PATH) -> list:
+    request = f"SELECT * FROM {table} WHERE {field} = '{row_value}'"
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute(request)
+        list_of_values = cursor.fetchall()
+    for i in range(len(list_of_values)):
+        list_of_values[i] = list_of_values[i][2:]
+    list_of_values = list(list_of_values[0])
+    list_of_values = list(filter(None,list_of_values))
+    return list_of_values
 
 def first_to_second(subject: str, first_score: int) -> int:
     second_score = get_second_scores(subject)[first_score-1]

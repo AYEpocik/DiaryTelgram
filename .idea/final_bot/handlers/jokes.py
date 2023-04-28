@@ -20,7 +20,6 @@ def get_joke_text(adult=False) -> str:
         for file in files:
             if file.endswith(".txt"):
                 file_names.append(file)
-    print(file_names)
     rand_joke_path = f'{all_jokes_path}\\{file_names[random.randint(0, len(file_names)-1)]}'
     with open(rand_joke_path, "r", encoding="utf-8") as file:
         return file.read()

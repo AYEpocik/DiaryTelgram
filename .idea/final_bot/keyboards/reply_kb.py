@@ -26,13 +26,3 @@ def main_menu_keyboard():
         input_field_placeholder="Чего пожелаете?)",
     )
     return keyboard
-
-def breakfast_or_lunch() -> ReplyKeyboardBuilder:
-    builder = ReplyKeyboardBuilder() # Создаем конструктор клавиатуры
-    builder.row(
-        types.KeyboardButton(text="Завтрак"),
-        types.KeyboardButton(text="Обед"),
-        types.KeyboardButton(text="Главное меню🏠")
-    )
-    builder.adjust(2) # Указываем количество кнопок в ряду
-    return builder.as_markup(resize_keyboard=True)

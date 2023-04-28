@@ -112,7 +112,10 @@ async def create_week_schedule(surname, DB_PATH=DB_PATH):
     # Создаем пустой датафрейм для хранения расписания
     schedule = pd.DataFrame()
     # Список дней недели
-    days = {"monday": "Понедельник", "tuesday": "Вторник", "wednesday": "Среда", "thursday": "Четверг",
+    days = {"monday": "Понедельник",
+            "tuesday": "Вторник",
+            "wednesday": "Среда",
+            "thursday": "Четверг",
             "friday": "Пятница"}
     # Цикл по дням недели
     for day in days:
