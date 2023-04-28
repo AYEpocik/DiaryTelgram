@@ -4,21 +4,27 @@ import datetime # Библиотека для работы с датами
 from aiogram import Router, types, F # Импортируем объект роутера, типы и магический фильтр
 from aiogram.filters import Text # Импортируем фильтр текста
 from aiogram.utils.keyboard import ReplyKeyboardBuilder # Импортируем объект конструктора клавиатуры
+from aiogram.fsm.context import FSMContext # Импортируем конечные автоматы
+from aiogram.fsm.state import StatesGroup, State # Импортируем объект состояния для бота FSM
 
 from keyboards.reply_kb import main_menu_keyboard, breakfast_or_lunch # Импортируем обычные клавиатуры
 from data.consts_and_vars import DB_PATH # Импортируем токен бота и путь к базе данных
-
+from data.bot_states import FoodMenu # Импортируем класс с состояниями бота для функции "Меню"
 
 router = Router() # Определяем роутер
 
 @router.message(Text("Что в столовой?🍲"))
-async def start(message: types.Message) -> None:
-	# Отправляем сообщение с выбором типа питания и клавиатурой
-	await message.answer("Вас интересует завтрак или обед?", reply_markup=breakfast_or_lunch())
+async def start(message: types.Message, state: FSMContext) -> None:
+    # Отправляем сообщение с выбором типа питания и клавиатурой
+    await message.answer("Вас интересует завтрак или обед?", reply_markup=breakfast_or_lunch())
+    await state.set_state(FoodMenu.ask_for_meal_times)
 
 
 # Определяем асинхронную функцию для обработки сообщений с текстом "Завтрак" или "Обед"
-@router.message(F.text.lower().in_({"завтрак", "обед"}))
+@router.message(
+    F.text.lower().in_({"завтрак", "обед"}),
+    FoodMenu.ask_for_meal_times
+)
 async def menu(message: types.Message) -> None:
     user_message = message.text.lower()  # Получаем текст сообщения от пользователя
     # Получаем текущую дату
@@ -43,7 +49,6 @@ async def menu(message: types.Message) -> None:
         cursor = conn.cursor()
         cursor.execute(query) # Выполняем запрос
         menu = cursor.fetchone()[0] # Получаем результат запроса в виде строки
-
     # Формируем текст сообщения бота с днем недели и меню
     # Если день недели - воскресенье, то пишем "Завтра на...", иначе пишем "Сегодня на..."
     if real_weekday == "sunday":

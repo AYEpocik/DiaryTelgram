@@ -3,8 +3,8 @@ import pandas as pd
 import sqlite3
 
 # Задаем имя файла excel и базы данных
-excel_file = "../../Database/school.xlsx"
-db_file = "../../Database/school.db"
+excel_file = "../Database/school.xlsx"
+db_file = "../Database/school.db"
 
 # Спрашиваем пользователя, какие страницы excel-файла добавить в базу данных
 sheets = (input("Введите названия страниц excel-файла через запятую: ").split(","))

@@ -1,10 +1,15 @@
 from aiogram import Router, types, F # Импортируем диспетчер, типы и магический фильтр
 import string # Библиотека для работы со строками
 
+from data.bot_states import Default
+
 
 router = Router() # Определяем роутер
 
-@router.message(F.text)
+@router.message(
+    Default.main,
+    F.text
+)
 async def calculate(message: types.Message):
     # Пытаемся вычислить выражение, используя функцию eval()
     try:
