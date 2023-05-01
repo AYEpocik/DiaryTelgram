@@ -46,3 +46,7 @@ async def send_sec_points(message: types.Message, state: FSMContext) -> None:
             await message.answer('Введите допустимое значение.')
     except ValueError:
         await message.answer('Можно цифирками?')
+    except KeyError:
+        await state.set_state(ConvertingPoints.chose_a_subject)
+        await get_primary_points(callback, state)
+        await callback.answer()
