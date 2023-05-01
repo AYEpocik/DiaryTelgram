@@ -3,7 +3,7 @@ from aiogram.filters import Text
 from aiogram.fsm.context import FSMContext
 
 from data.bot_states import ScheduleStates
-from data.consts_and_vars import list_of_values, weekdays
+from data.consts_and_vars import get_values_of_row, weekdays
 from keyboards.inline_kb import get_surnames_kb, get_weekday_kb
 
 
@@ -26,19 +26,24 @@ async def ask_for_weekday(callback: types.callback_query, state: FSMContext) -> 
     await state.set_state(ScheduleStates.waiting_for_weekday)
 
 @router.callback_query(ScheduleStates.waiting_for_weekday)
-async def schedule(callback: types.callback_query) -> None:
-    global weekday
-    weekday = callback.data
-    text = f'<u>{weekdays[weekday].capitalize()}</u>:\n\n'
-    if weekday == 'saturday':
-        text += '<i>Выходной день</i>'
-    elif surname == 'тагирова':
-        text += '<i>Домашнее обучение</i>'
-    else:
-        lessons_of_weekday = list_of_values(table=weekday, field='surname', row_value=surname)
-        i = 1
-        for lesson in lessons_of_weekday:
-            text += f'{i}. {lesson}\n'
-            i += 1
-    await callback.message.answer(text, parse_mode='HTML')
-    await callback.answer()
+async def schedule(callback: types.callback_query, state: FSMContext) -> None:
+    try:
+        global weekday
+        weekday = callback.data
+        text = f'<u>{weekdays[weekday].capitalize()}</u>:\n\n'
+        if weekday == 'saturday':
+            text += '<i>Выходной день</i>'
+        elif surname == 'тагирова':
+            text += '<i>Домашнее обучение</i>'
+        else:
+            lessons_of_weekday = get_values_of_row(table=weekday, field='surname', row_value=surname)
+            i = 1
+            for lesson in lessons_of_weekday:
+                text += f'{i}. {lesson}\n'
+                i += 1
+        await callback.message.answer(text, parse_mode='HTML')
+        await callback.answer()
+    except KeyError:
+        await state.set_state(ScheduleStates.waiting_for_surname)
+        await ask_for_weekday(callback, state)
+        await callback.answer()

@@ -30,7 +30,7 @@ async def menu(callback: types.callback_query) -> None:
     # Если день недели - воскресенье, то добавляем один день к дате и получаем понедельник
     if real_weekday == "sunday":
         date += datetime.timedelta(days=1)
-        weekday = date.strftime("%a")
+        weekday = date.strftime("%A").lower()
     else:
         weekday = real_weekday
     # Формируем запрос к базе данных для получения меню по дню недели и типу питания
@@ -57,7 +57,3 @@ async def menu(callback: types.callback_query) -> None:
     # Отправляем сообщение пользователю
     await callback.message.answer(bot_message)
     await callback.answer()
-
-@router.callback_query(FoodMenu.ask_for_meal_times)
-async def cheking(callback: types.callback_query):
-    print('хэндлер пропущен')

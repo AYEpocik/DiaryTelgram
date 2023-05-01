@@ -40,3 +40,4 @@ async def say_joke(message: types.Message, state: FSMContext) -> None:
 async def say_adult_joke(message: types.Message, state: FSMContext) -> None:
     await message.answer(get_joke_text(adult=True))
     await state.set_state(Default.main)
+

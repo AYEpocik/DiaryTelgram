@@ -6,7 +6,7 @@ import asyncio # Библиотека "асинхронности"
 from aiogram import Bot, Dispatcher # Импортируем объекты бота, диспетчера
 
 from handlers import common, schedule, menu, scores, jokes, calc, echo_gif_or_sticker # Импортируем модули с хэндлерами
-from data.consts_and_vars import TOKEN, list_of_values # Импортируем константы и переменные
+from data.consts_and_vars import TOKEN, get_values_of_field, ADMIN_ID # Импортируем константы и переменные
 
 
 bot = Bot(token=TOKEN) # Создаем объект бота
@@ -22,9 +22,9 @@ dp.include_routers(common.router,
                    echo_gif_or_sticker.router,
 )
 
-
 async def main():
     await bot.delete_webhook(drop_pending_updates=True) # Пропускаем все накопленные входящие
+    await bot.send_message(ADMIN_ID, 'Бот запущен!')
     print('Бот запущен!')
     await dp.start_polling(bot) # Запускаем бота
 

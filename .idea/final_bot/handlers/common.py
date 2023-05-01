@@ -26,6 +26,7 @@ async def start_message(message: types.Message, state: FSMContext):
         conn.execute("INSERT OR IGNORE INTO users (user_id, username) VALUES (:user_id, :username)", {"user_id": user_id, "username": username})
         # Сохраняем изменения в базе данных
         conn.commit()
+    #await
     await state.set_state(Default.main)
 
 @router.message(Text("Главное меню🏠"))

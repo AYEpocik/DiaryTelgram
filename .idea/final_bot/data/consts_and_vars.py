@@ -2,6 +2,9 @@ import os
 import sqlite3 # Импортируем библиотеку для работы с базой данных
 
 
+# Определяем id администратора
+ADMIN_ID = '687941764'
+
 # Определяем токен "schoolhelper_bot"-а
 TOKEN = '6111962134:AAHxMHk9M44KTy7I_ZL9fSXYKOL2Cw3n-W8'
 
@@ -104,7 +107,7 @@ def get_second_scores(subject: str, DB_PATH=DB_PATH) -> list:
         sec_scores[i] = int(sec_scores[i])
     return sec_scores
 
-def list_of_values(table: str, field: str, row_value: str, DB_PATH=DB_PATH) -> list:
+def get_values_of_row(table: str, field: str, row_value: str, DB_PATH=DB_PATH) -> list:
     request = f"SELECT * FROM {table} WHERE {field} = '{row_value}'"
     with sqlite3.connect(DB_PATH) as conn:
         cursor = conn.cursor()
@@ -113,6 +116,18 @@ def list_of_values(table: str, field: str, row_value: str, DB_PATH=DB_PATH) -> l
     for i in range(len(list_of_values)):
         list_of_values[i] = list_of_values[i][2:]
     list_of_values = list(list_of_values[0])
+    list_of_values = list(filter(None,list_of_values))
+    return list_of_values
+
+def get_values_of_field(table: str, field: str) -> list:
+    request = f'SELECT {field} FROM {table}'
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute(request)
+        list_of_values = cursor.fetchall()
+    for i in range(len(list_of_values)):
+        list_of_values[i] = list_of_values[i][0]
+    #list_of_values = list(list_of_values[0])
     list_of_values = list(filter(None,list_of_values))
     return list_of_values
 
