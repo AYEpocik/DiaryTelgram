@@ -1,10 +1,9 @@
-import random
 import os
+import random
 
-from aiogram import Router, types, F  # Импортируем объект роутера и типы
+from aiogram import Router, types  # Импортируем объект роутера и типы
 from aiogram.filters import Text  # Импортируем фильтр текста
 from aiogram.fsm.context import FSMContext  # Импортируем конечные автоматы
-
 from data.bot_states import Default  # Импортируем класс с "обыкновенным" работы
 from data.consts_and_vars import JOKES_PATH, abs_path
 
@@ -31,13 +30,13 @@ def get_joke_text(adult=False) -> str:
 router = Router()
 
 
-@router.message(Text('Расскажи анекдот😂'))
+@router.message(Text(startswith='расскажи анекдот', ignore_case=True))
 async def say_joke(message: types.Message, state: FSMContext) -> None:
     await message.answer(get_joke_text())
     await state.set_state(Default.main)
 
 
-@router.message(F.text.lower() == 'анек')
+@router.message(Text(text='анек', ignore_case=True))
 async def say_adult_joke(message: types.Message, state: FSMContext) -> None:
     await message.answer(get_joke_text(adult=True))
     await state.set_state(Default.main)

@@ -1,11 +1,15 @@
 import os
 import sqlite3  # Импортируем библиотеку для работы с базой данных
+from dotenv import load_dotenv
 
 # Определяем id администратора
 ADMIN_ID = '687941764'
 
 # Определяем токен "schoolhelper_bot"-а
-TOKEN = '6111962134:AAHxMHk9M44KTy7I_ZL9fSXYKOL2Cw3n-W8'
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+if os.path.exists(dotenv_path):
+    if load_dotenv(dotenv_path):
+        TOKEN = os.environ.get('TOKEN')
 
 # Определяем путь к файлу с базой данных
 DB_PATH = '../Database/school.db'

@@ -11,7 +11,7 @@ from data.consts_and_vars import TOKEN, DB_PATH, all_surnames, school_subjects, 
 router = Router()
 
 
-@router.message(Text('Перевод баллов ЕГЭ💯'))
+@router.message(Text(startswith='перевод баллов', ignore_case=True))
 async def get_subject(message: types.Message, state: FSMContext) -> None:
     global max_points, subject
     max_points = 0

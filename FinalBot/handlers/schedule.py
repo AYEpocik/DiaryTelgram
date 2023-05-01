@@ -9,7 +9,7 @@ from keyboards.inline_kb import get_surnames_kb, get_weekday_kb
 router = Router()
 
 
-@router.message(Text('Расписание📅'))
+@router.message(Text(startswith='расписание', ignore_case=True))
 async def ask_for_surname(message: types.Message, state: FSMContext) -> None:
     global surname, weekday
     surname = ''

@@ -30,7 +30,7 @@ async def start_message(message: types.Message, state: FSMContext):
     await state.set_state(Default.main)
 
 
-@router.message(Text("Главное меню🏠"))
+@router.message(Text(startswith='главное меню', ignore_case=True))
 async def get_main_menu(message: types.Message, state: FSMContext):
     # Отправляем сообщение с клавиатурой с функциями бота
     await message.answer("Выберите одну из функций бота.", reply_markup=main_menu_keyboard())
