@@ -6,8 +6,8 @@ from data.bot_states import ScheduleStates
 from data.consts_and_vars import get_values_of_row, weekdays
 from keyboards.inline_kb import get_surnames_kb, get_weekday_kb
 
-
 router = Router()
+
 
 @router.message(Text('Расписание📅'))
 async def ask_for_surname(message: types.Message, state: FSMContext) -> None:
@@ -17,6 +17,7 @@ async def ask_for_surname(message: types.Message, state: FSMContext) -> None:
     await message.answer('Выберите фамилию ученика', reply_markup=get_surnames_kb())
     await state.set_state(ScheduleStates.waiting_for_surname)
 
+
 @router.callback_query(ScheduleStates.waiting_for_surname)
 async def ask_for_weekday(callback: types.callback_query, state: FSMContext) -> None:
     global surname
@@ -24,6 +25,7 @@ async def ask_for_weekday(callback: types.callback_query, state: FSMContext) -> 
     await callback.message.answer('Выберите день недели', reply_markup=get_weekday_kb())
     await callback.answer()
     await state.set_state(ScheduleStates.waiting_for_weekday)
+
 
 @router.callback_query(ScheduleStates.waiting_for_weekday)
 async def schedule(callback: types.callback_query, state: FSMContext) -> None:

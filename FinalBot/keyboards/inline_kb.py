@@ -1,19 +1,20 @@
 from aiogram import types
-from aiogram.utils.keyboard import InlineKeyboardBuilder
-from data.consts_and_vars import all_surnames, school_subjects, weekdays # Импортируем константы и переменные
+from aiogram.utils.keyboard import InlineKeyboardBuilder, InlineKeyboardMarkup
+from data.consts_and_vars import all_surnames, school_subjects, weekdays  # Импортируем константы и переменные
 
 
-def get_subject_kb() -> InlineKeyboardBuilder:
+def get_subject_kb() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for school_subject in school_subjects:
         builder.add(types.InlineKeyboardButton(
-        text=school_subject,
-        callback_data=school_subjects[school_subject])
+            text=school_subject,
+            callback_data=school_subjects[school_subject])
         )
     builder.adjust(3)
     return builder.as_markup()
 
-def get_surnames_kb() -> InlineKeyboardBuilder:
+
+def get_surnames_kb() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for surname in all_surnames():
         builder.add(types.InlineKeyboardButton(
@@ -23,7 +24,8 @@ def get_surnames_kb() -> InlineKeyboardBuilder:
     builder.adjust(2)
     return builder.as_markup()
 
-def get_weekday_kb() -> InlineKeyboardBuilder:
+
+def get_weekday_kb() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for weekday in weekdays:
         builder.add(types.InlineKeyboardButton(
@@ -33,8 +35,9 @@ def get_weekday_kb() -> InlineKeyboardBuilder:
     builder.adjust(2)
     return builder.as_markup()
 
-def breakfast_or_lunch() -> InlineKeyboardBuilder:
-    builder = InlineKeyboardBuilder() # Создаем конструктор клавиатуры
+
+def breakfast_or_lunch() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()  # Создаем конструктор клавиатуры
     builder.row(
         types.InlineKeyboardButton(text='Завтрак', callback_data='завтрак'),
         types.InlineKeyboardButton(text='Обед', callback_data='обед')

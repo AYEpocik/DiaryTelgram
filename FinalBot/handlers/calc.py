@@ -1,10 +1,10 @@
-from aiogram import Router, types, F # Импортируем диспетчер, типы и магический фильтр
-import string # Библиотека для работы со строками
+from aiogram import Router, types, F  # Импортируем диспетчер, типы и магический фильтр
+import string  # Библиотека для работы со строками
 
 from data.bot_states import Default
 
+router = Router()  # Определяем роутер
 
-router = Router() # Определяем роутер
 
 @router.message(
     Default.main,
@@ -17,7 +17,7 @@ async def calculate(message: types.Message):
         for i in message.text:
             if i not in string.digits + string.punctuation:
                 decide = False
-        if decide == True:
+        if decide:
             result = eval(message.text)
             # Отправляем результат в чат с пользователем
             await message.answer(result)
